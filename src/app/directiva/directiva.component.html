@@ -4,6 +4,96 @@
     Listado de Cursos
   </div>
   <ul class="list-group" *ngIf="habilitar ==true">
-   <li class="list-group-item" *ngFor="let curso of listaCurso">{{curso}}</li> 
+   <li class="list-group-item" *ngFor="let curso of listaCurso">{{curso}}</li>
   </ul>
+</div>
+<div class="container bg-dark text-white">
+  <h2>Formulario con Tabs</h2>
+  <br />
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                [class.active]="activeTab === 1"
+                (click)="activeTab = 1"
+              >
+                Datos Personales
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                [class.active]="activeTab === 2"
+                (click)="activeTab = 2"
+              >
+                Datos de Contacto
+              </a>
+            </li>
+          </ul>
+          <br />
+          <form [formGroup]="form" (ngSubmit)="form && form.valid && onSubmit()">
+            <div *ngIf="activeTab === 1">
+              <div class="form-group">
+                <label for="name">Nombre</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  formControlName="name"
+                />
+                <div
+                  class="alert alert-danger"
+                  *ngIf="form?.get('name')?.invalid && form?.get('name')?.touched"
+                >
+                  Nombre es requerido
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="age">Edad</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="age"
+                  formControlName="age"
+                />
+                <div
+                  class="alert alert-danger"
+                  *ngIf="form?.get('age')?.invalid && form?.get('age')?.touched"
+                >
+                  Edad es requerida
+                </div>
+              </div>
+            </div>
+            <div *ngIf="activeTab === 2">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  formControlName="email"
+                />
+                <div
+                  class="alert alert-danger"
+                  *ngIf="form?.get('email')?.invalid && form?.get('email')?.touched"
+                >
+                  Email inválido
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">
+                Enviar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
