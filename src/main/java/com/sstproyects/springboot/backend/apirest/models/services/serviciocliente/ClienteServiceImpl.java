@@ -1,4 +1,4 @@
-package com.sstproyects.springboot.backend.apirest.models.services;
+package com.sstproyects.springboot.backend.apirest.models.services.serviciocliente;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sstproyects.springboot.backend.apirest.models.dao.IClienteDao;
-import com.sstproyects.springboot.backend.apirest.models.entity.Cliente;
+import com.sstproyects.springboot.backend.apirest.models.dao.serviciocliente.IClienteDao;
+import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.Cliente;
 
 @Service
 public class ClienteServiceImpl implements IClienteService {

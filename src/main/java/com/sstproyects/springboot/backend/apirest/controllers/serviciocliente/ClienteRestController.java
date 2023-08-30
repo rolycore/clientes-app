@@ -1,7 +1,5 @@
-package com.sstproyects.springboot.backend.apirest.controllers;
+package com.sstproyects.springboot.backend.apirest.controllers.serviciocliente;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,17 +7,14 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.sstproyects.springboot.backend.apirest.models.dao.serviciocliente.IClienteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,15 +23,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.method.support.HandlerMethodReturnValueHandlerComposite;
 
-import com.sstproyects.springboot.backend.apirest.models.entity.Cliente;
-import com.sstproyects.springboot.backend.apirest.models.services.IClienteService;
+import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.Cliente;
+import com.sstproyects.springboot.backend.apirest.models.services.serviciocliente.IClienteService;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
 public class ClienteRestController {
+  @Autowired
+  private IClienteDao iClienteDao;
 	@Autowired
 	private IClienteService clienteService;
 
@@ -78,29 +74,23 @@ public class ClienteRestController {
 		//manejo de errores
 		//si contiene errores lo validamos en este if
 		if(result.hasErrors()) {
-			/* esta forma se utiliza tambien pero es un poco mas de codigo y es anterios al JDK 8
-			 * List<String> errors= new ArrayList<>();
-			
-			for(FieldError err: result.getFieldErrors()) {
-				errors.add("El campo '"+ err.getField()+"' "+err.getDefaultMessage());
-				
-			}*/
+
 		List<String> errors= result.getFieldErrors()
 					.stream()
 					.map(err ->"El campo '"+ err.getField()+"' "+err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-			
-			
+
+
 		try {
-			
+
 			clienteNew = clienteService.save(cliente);
-			
+
 		} catch (DataAccessException e) {
-			
+
 			response.put("mensaje", "Error al realizar el insertar en la base de datos!");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,41 +100,8 @@ public class ClienteRestController {
 		response.put("cliente", clienteNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 
-	} 
-	/*@PostMapping("/clientes")
-	public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente, BindingResult result) throws MethodArgumentNotValidException {
-
-	    if (result.hasErrors()) {
-	        List<String> errors = result.getFieldErrors()
-	                .stream()
-	                .map(err -> "El campo '" + err.getField() + "' " + err.getDefaultMessage())
-	                .collect(Collectors.toList());
-
-	        return ResponseEntity.badRequest().body(errors);
-	    }
-
-	    try {
-	        Cliente clienteNew = clienteService.save(cliente);
-	        return ResponseEntity.status(HttpStatus.CREATED)
-	                .body(clienteNew + " El cliente ha sido creado con éxito!");
-	    } catch (DataAccessException e) {
-	        Map<String, Object> response = new HashMap<>();
-	        response.put("mensaje", "Error al realizar el insertar en la base de datos!");
-	        response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                .body(response);
-	    }
 	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
-	    List<String> errors = ex.getBindingResult().getFieldErrors()
-	            .stream()
-	            .map(err -> "El campo '" + err.getField() + "' " + err.getDefaultMessage())
-	            .collect(Collectors.toList());
-
-	    return ResponseEntity.badRequest().body(errors);
-	}*/
 	// Actualizar Cliente por ID
 	@PutMapping("/clientes/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, BindingResult result, @PathVariable Long id) {
@@ -159,11 +116,11 @@ public class ClienteRestController {
 					.stream()
 					.map(err ->"El campo '"+ err.getField()+"' "+err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		if (clienteActual == null) {
 			response.put("mensaje", "Error:no se pudo editar, el cliente ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
@@ -201,7 +158,7 @@ public class ClienteRestController {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
-	
+
 
 		response.put("mensaje", "El cliente eliminado con éxito!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
