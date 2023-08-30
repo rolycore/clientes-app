@@ -16,13 +16,14 @@ export class ClienteService {
   private httpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
   constructor(private http: HttpClient, private router: Router) {}
   //Metodo get que muestra todos los clientes
-  getClientes(): Observable<Cliente[]> {
+ getClientes(): Observable<Cliente[]> {
     return this.http.get<Cliente[]>(this.urlEndpoint).pipe(
       tap(response =>{
         let clientes=response as Cliente[];
         clientes.forEach(cliente=>{
           console.log('ClienteService : tap 1');
           console.log(cliente.nombre);
+
         })
       }),
       map(response=> {
@@ -46,7 +47,7 @@ export class ClienteService {
     //return this.http.get(this.urlEndpoint).pipe(map((response) => as Cliente[])); //esta forma esta deprecada
   }
   //metodo get buscar Cliente por ID
-  getCliente(id: any): Observable<Cliente> {
+  /*getCliente(id: any): Observable<Cliente> {
     return this.http.get<Cliente>(`${this.urlEndpoint}/${id}`).pipe(
       catchError(e =>{
         this.router.navigate(['/clientes']);
@@ -56,7 +57,37 @@ export class ClienteService {
         return throwError(e);
       })
     );
+  }*/
+  getCliente(id: any): Observable<Cliente> {
+    return this.http.get<Cliente>(`${this.urlEndpoint}/${id}`).pipe(
+      catchError(e =>{
+        this.router.navigate(['/clientes']);
+        console.error(e.error.mensaje);
+
+        swal.fire('Error al editar',e.error.mensaje,'error');
+        return throwError(e);
+      }),
+      map((cliente: Cliente) => {
+        cliente.nombre = cliente.nombre.toUpperCase();
+        cliente.apellido = cliente.apellido.toUpperCase();
+        // Realiza cualquier otra modificación necesaria en los campos del cliente aquí
+        return cliente;
+      })
+    );
   }
+  /*En este ejemplo, utilizamos el operador map para modificar los campos del cliente, en este caso, convirtiendo el nombre y el apellido en mayúsculas. Puedes realizar cualquier otra modificación o procesamiento que necesites dentro del bloque map.
+
+  De esta manera, cuando llames al método getCliente(id) desde tu componente FormComponent, obtendrás el objeto completo del cliente, incluyendo los campos adicionales, como el apellido, el email y cualquier otro campo definido en la clase Cliente.
+
+  Recuerda que también debes asegurarte de que los campos adicionales estén definidos correctamente en la clase Cliente para que coincidan con la estructura de los datos devueltos por el servicio.
+
+  Espero que esto te ayude a obtener los otros campos del cliente en tu servicio ClienteService. Si tienes alguna otra pregunta, no dudes en preguntar.*/
+
+
+
+
+
+
   //Metodo create que crea los clientes
   create(cliente: Cliente): Observable<any> {
     return this.http.post<any>(this.urlEndpoint, cliente, {
