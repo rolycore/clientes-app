@@ -1,0 +1,23 @@
+CREATE TABLE cotizacion_cabe (
+  create_at date DEFAULT NULL,
+  grantotal_cotizacion double NOT NULL,
+  itbms_cotizacion double NOT NULL,
+  valortotal_cotizacion double NOT NULL,
+  id bigint NOT NULL AUTO_INCREMENT,
+  aprobacion_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
+  celular_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  cliente_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  cod_cliente varchar(255) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
+  cod_solicitud varchar(255) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
+  contacto_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  correo_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  direccion_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  estado_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
+  fecha_emitida_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  fecha_vencimiento_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  fechaaprobacion varchar(255) COLLATE utf8mb4_spanish2_ci DEFAULT NULL,
+  no_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  telefono_cotizacion varchar(255) COLLATE utf8mb4_spanish2_ci NOT NULL,
+  observaciones_cotizacion tinytext COLLATE utf8mb4_spanish2_ci,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
