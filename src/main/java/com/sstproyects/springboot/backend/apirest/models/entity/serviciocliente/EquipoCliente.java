@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity(name="EquipoCliente")
+@Entity
 @Table(name="equipocliente")
 @Getter
 @Setter
@@ -40,7 +40,9 @@ public class EquipoCliente implements Serializable {
   private String divisiones ;
   @Column
   private String observaciones ;
-  @Column
+  @NotEmpty(message =" no puede estar vacio")
+  @NotBlank(message =" no puede estar vacio")
+  @Column(nullable=false)
   private String cod_cliente_equipo;
   @Lob
   @NotEmpty(message =" no puede estar vacio")
@@ -86,7 +88,27 @@ public class EquipoCliente implements Serializable {
   @PrePersist
   public void prePersist() {
     createAt = new Date();
+    // Simplemente para garantizar que el código se genere antes de la persistencia
+    if (cod_cliente_equipo == null || cod_cliente_equipo.isEmpty()) {
+      generarCodigo();
+    }
+  }
+  private void generarCodigo() {
+    // Aquí realizas la lógica para generar el nuevo código de acuerdo a tus necesidades
+    // Por ejemplo, consultar el último código almacenado y generar el siguiente
+    // número de secuencia.
 
+    // Supongamos que el último código almacenado fue "CC0001"
+    String ultimoCodigo = "CC0001";
+
+    // Extraer el número de secuencia y aumentar en uno
+    int numeroSecuencia = Integer.parseInt(ultimoCodigo.substring(2)) + 1;
+
+    // Formatear el nuevo número de secuencia para que tenga el formato deseado
+    String nuevoCodigo = String.format("CC%04d", numeroSecuencia);
+
+    // Establecer el nuevo código generado
+    this.cod_cliente_equipo = nuevoCodigo;
   }
 
 }

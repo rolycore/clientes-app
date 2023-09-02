@@ -2,25 +2,17 @@ package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import lombok.*;
 
 
-@Entity(name="Cliente")
+
+@Entity
 @Table(name="cliente")
 @Getter
 @Setter
@@ -54,7 +46,9 @@ public class Cliente implements Serializable{
 	private Date createAt;
   @Column
   private String telefono_empresa;
-  @Column
+  @Column(nullable=false, unique=true)
+  @NotEmpty(message =" no puede estar vacio")
+  @NotBlank(message =" no puede estar vacio")
   private String cod_cliente;
   @Column
   private String razon_social;
@@ -100,11 +94,12 @@ public class Cliente implements Serializable{
   private String celular_cobro;
   @Column
   private String correo_cobro;
-
+  private static final long serialVersionUID= 1L;
 	@PrePersist
 	public void prePersist() {
 		createAt = new Date();
 
-	}
+
+  }
 
 }
