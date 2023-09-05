@@ -1,4 +1,5 @@
 package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente;
+import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,8 +13,8 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class Precio {
+@EqualsAndHashCode(of = "id",callSuper = false)
+public class Precio extends Auditable implements Serializable{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +55,9 @@ public class Precio {
   private String nombreListaPrecios;
   @Temporal(TemporalType.DATE)
   private Date createAt;
+  @Column(columnDefinition = "boolean default true") // Valor predeterminado establecido en "true" por defecto
+  private boolean activo;
+  private static final long serialVersionUID= 1L;
   @PrePersist
   public void prePersist() {
     createAt = new Date();

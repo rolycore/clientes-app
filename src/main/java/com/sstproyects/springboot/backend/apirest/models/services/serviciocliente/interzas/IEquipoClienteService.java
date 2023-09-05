@@ -1,4 +1,4 @@
-package com.sstproyects.springboot.backend.apirest.models.services.serviciocliente;
+package com.sstproyects.springboot.backend.apirest.models.services.serviciocliente.interzas;
 
 import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.EquipoCliente;
 

@@ -1,25 +1,30 @@
 package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
-
+import org.hibernate.annotations.ColumnTransformer;
 
 
 @Entity
 @Table(name="cliente")
 @Getter
 @Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class Cliente implements Serializable{
+@EqualsAndHashCode(of = "id", callSuper = false)
+public class Cliente extends Auditable implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -36,19 +41,21 @@ public class Cliente implements Serializable{
 	private String apellido;
 	@NotEmpty(message =" no puede estar vacio")
 	@NotBlank(message =" no puede estar vacio")
-	@Email(message="no es una dirección bien formada")
+	@Email(message=" no es una dirección bien formada")
 	@Column(nullable=false, unique=true)
 	private String email;
 	@NotEmpty(message =" no puede estar vacio")
-	@NotBlank(message =" no puede estar vacio")
 	@Column(name="create_at",nullable=false)
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
   @Column
   private String telefono_empresa;
-  @Column(nullable=false, unique=true)
-  @NotEmpty(message =" no puede estar vacio")
-  @NotBlank(message =" no puede estar vacio")
+
+  @Column(nullable=false, unique=true, updatable = false)
+  @ColumnTransformer(
+    read = "substring(cod_cliente, 5)", // Para leer desde la base de datos sin el prefijo
+    write = "concat('COD_', ?)" // Para escribir en la base de datos con el prefijo
+  )
   private String cod_cliente;
   @Column
   private String razon_social;
@@ -94,12 +101,31 @@ public class Cliente implements Serializable{
   private String celular_cobro;
   @Column
   private String correo_cobro;
+  @Column(columnDefinition = "boolean default true") // Valor predeterminado establecido en "true" por defecto
+  private boolean activo;
   private static final long serialVersionUID= 1L;
+  // Relación con Equipos
+  //@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+  //private List<EquipoCliente> equipos = new ArrayList<>();
+
 	@PrePersist
 	public void prePersist() {
 		createAt = new Date();
 
+    /*if (this.id != null) {
+    if (this.id <= 9) {
+      this.cod_cliente = "CC-000" + String.valueOf(this.id);
+    }
+   else if (this.id < 10) {
+      this.cod_cliente = "CC-00" + String.valueOf(this.id);
+    } else if (this.id < 100) {
+      this.cod_cliente = "CC-0" + String.valueOf(this.id);
+    } else {
+      this.cod_cliente = "CC-" + String.valueOf(this.id);
+    }
+    }*/
 
   }
+
 
 }

@@ -3,10 +3,15 @@ package com.sstproyects.springboot.backend.apirest.controllers.serviciocliente;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.sstproyects.springboot.backend.apirest.models.services.serviciocliente.interzas.IClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import com.sstproyects.springboot.backend.apirest.models.dao.serviciocliente.IClienteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -25,21 +30,36 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.Cliente;
-import com.sstproyects.springboot.backend.apirest.models.services.serviciocliente.IClienteService;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
+@Tag(name = "Clientes")
 public class ClienteRestController {
   @Autowired
   private IClienteDao iClienteDao;
-	@Autowired
-	private IClienteService clienteService;
+  @Autowired
+  private IClienteService clienteService;
 
+  @Operation(
+    description = "Get endpoint for clientes",
+    summary = "This is a summary for clientes get endpoint",
+    responses = {
+      @ApiResponse(
+        description = "Success",
+        responseCode = "200"
+      ),
+      @ApiResponse(
+        description = "Unauthorized / Invalid Token",
+        responseCode = "403"
+      )
+    }
+
+  )
 	// Buscar todos clientes
 	@GetMapping("/clientes")
 	public List<Cliente> index() {
-		return clienteService.findAll();
+		return iClienteDao.findAll();
 
 	}
 
@@ -70,6 +90,7 @@ public class ClienteRestController {
 @PostMapping("/clientes")
 	public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente,BindingResult result) {
 		Cliente clienteNew = null;
+
 		Map<String, Object> response = new HashMap<>();
 		//manejo de errores
 		//si contiene errores lo validamos en este if
@@ -131,7 +152,27 @@ public class ClienteRestController {
 			clienteActual.setApellido(cliente.getApellido());
 			clienteActual.setNombre(cliente.getNombre());
 			clienteActual.setEmail(cliente.getEmail());
-			clienteActual.setCreateAt(cliente.getCreateAt());
+			clienteActual.setTelefono_empresa(cliente.getTelefono_empresa());
+      clienteActual.setRazon_social(cliente.getRazon_social());
+        clienteActual.setNombre_comercial(cliente.getNombre_comercial());
+        clienteActual.setRuc(cliente.getRuc());
+        clienteActual.setDv(cliente.getDv());
+        clienteActual.setDireccion(cliente.getDireccion());
+        clienteActual.setTelefono_jefe(cliente.getTelefono_jefe());
+        clienteActual.setCelular_jefe(cliente.getCelular_jefe());
+        clienteActual.setCorreo_electronico(cliente.getCorreo_electronico());
+        clienteActual.setActividad_economica(cliente.getActividad_economica());
+        clienteActual.setAbreviatura(cliente.getAbreviatura());
+        clienteActual.setNombre_contacto(cliente.getNombre_contacto());
+        clienteActual.setCargo_servicio(cliente.getCargo_servicio());
+        clienteActual.setCelular_servicio(cliente.getCelular_servicio());
+        clienteActual.setCorreo_servicio(cliente.getCorreo_servicio());
+        clienteActual.setTelefono_servicio(cliente.getTelefono_servicio());
+        clienteActual.setNombre_cobro(cliente.getNombre_cobro());
+        clienteActual.setCargo_cobro(cliente.getCargo_cobro());
+        clienteActual.setTelefono_cobro(cliente.getTelefono_cobro());
+        clienteActual.setCelular_cobro(cliente.getCelular_cobro());
+        clienteActual.setCorreo_cobro(cliente.getCorreo_cobro());
 			clienteUpdated = clienteService.save(clienteActual);
 
 		} catch (DataAccessException e) {

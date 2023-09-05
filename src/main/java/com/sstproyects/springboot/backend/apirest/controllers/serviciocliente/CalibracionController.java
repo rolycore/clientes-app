@@ -5,10 +5,12 @@ import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("api/v1")
 @CrossOrigin(origins = { "http://localhost:4200" })
 public class CalibracionController {
 
@@ -16,11 +18,13 @@ public class CalibracionController {
 
   @Autowired
   public CalibracionController(ICalibracionDao calibracionDao) {
+
     this.calibracionDao = calibracionDao;
   }
 
   @GetMapping("/calibraciones")
   public List<Calibracion> getAllCalibraciones() {
+
     return calibracionDao.findAll();
   }
 
@@ -35,13 +39,13 @@ public class CalibracionController {
   }
 
   @PostMapping("/calibraciones")
-  public ResponseEntity<Calibracion> createCalibracion(@RequestBody Calibracion calibracion) {
+  public ResponseEntity<Calibracion> createCalibracion(@Valid @RequestBody  Calibracion calibracion) {
     Calibracion savedCalibracion = calibracionDao.save(calibracion);
     return ResponseEntity.ok(savedCalibracion);
   }
 
   @PutMapping("/calibraciones/{id}")
-  public ResponseEntity<Calibracion> updateCalibracion(@PathVariable Long id, @RequestBody Calibracion calibracionDetails) {
+  public ResponseEntity<Calibracion> updateCalibracion(@Valid @PathVariable Long id, @RequestBody Calibracion calibracionDetails) {
     Calibracion calibracion = calibracionDao.findById(id).orElse(null);
     if (calibracion != null) {
       calibracion.setDescripcion(calibracionDetails.getDescripcion());

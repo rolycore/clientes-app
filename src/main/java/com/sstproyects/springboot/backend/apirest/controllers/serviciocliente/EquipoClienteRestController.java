@@ -1,6 +1,7 @@
 package com.sstproyects.springboot.backend.apirest.controllers.serviciocliente;
+import com.sstproyects.springboot.backend.apirest.models.dao.serviciocliente.IEquipoClienteDao;
 import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.EquipoCliente;
-import com.sstproyects.springboot.backend.apirest.models.services.serviciocliente.IEquipoClienteService;
+import com.sstproyects.springboot.backend.apirest.models.services.serviciocliente.interzas.IEquipoClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,11 +22,12 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class EquipoClienteRestController {
   @Autowired
   private IEquipoClienteService equipoClienteService;

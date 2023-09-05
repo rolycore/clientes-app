@@ -1,5 +1,6 @@
 package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente;
 
+import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -17,7 +18,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SolicitudDetalle implements Serializable {
+public class SolicitudDetalle extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +64,7 @@ public class SolicitudDetalle implements Serializable {
   private String descripcion;
   @Temporal(TemporalType.DATE)
   private Date createAt;
+  private static final long serialVersionUID= 1L;
   @PrePersist
   public void prePersist() {
     createAt = new Date();

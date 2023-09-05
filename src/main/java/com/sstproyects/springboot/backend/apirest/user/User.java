@@ -1,22 +1,21 @@
 package com.sstproyects.springboot.backend.apirest.user;
 
+import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import com.sstproyects.springboot.backend.apirest.token.Token;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.Collection;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Data
 @Builder
@@ -24,21 +23,43 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
-public class User implements UserDetails {
+@EqualsAndHashCode(of = "id",callSuper=false)
+public class User extends Auditable implements UserDetails {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy= GenerationType.IDENTITY)
   private Integer id;
+  @NotEmpty(message =" no puede estar vacio")
+  @NotBlank(message =" no puede estar vacio")
+  @Size(min=4, max=100, message="el tamaño tiene que estar entre 4 y 12")
+  @Column(nullable=false)
   private String firstname;
+  @NotEmpty(message =" no puede estar vacio")
+  @NotBlank(message =" no puede estar vacio")
+  @Size(min=4, max=100, message="el tamaño tiene que estar entre 4 y 12")
+  @Column(nullable=false)
   private String lastname;
+  @NotEmpty(message =" no puede estar vacio")
+  @NotBlank(message =" no puede estar vacio")
+  @Email(message="no es una dirección bien formada")
+  @Column(nullable=false, unique=true)
   private String email;
+  @NotEmpty(message =" no puede estar vacio")
+  @NotBlank(message =" no puede estar vacio")
+  @Size(min=4, max=25, message="el tamaño tiene que estar entre 4 y 25")
+  @Column(nullable=false)
   private String password;
 
   @Enumerated(EnumType.STRING)
+  @NotEmpty(message =" no puede estar vacio")
+  @NotBlank(message =" no puede estar vacio")
+  @Column(nullable=false)
   private Role role;
 
   @OneToMany(mappedBy = "user")
   private List<Token> tokens;
+  @Column(columnDefinition = "boolean default true") // Valor predeterminado establecido en "true" por defecto
+  private boolean activo;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

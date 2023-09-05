@@ -1,6 +1,7 @@
-package com.sstproyects.springboot.backend.apirest.models.services.serviciocliente;
+package com.sstproyects.springboot.backend.apirest.models.services.serviciocliente.service;
 import com.sstproyects.springboot.backend.apirest.models.dao.serviciocliente.IEquipoClienteDao;
 import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.EquipoCliente;
+import com.sstproyects.springboot.backend.apirest.models.services.serviciocliente.interzas.IEquipoClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

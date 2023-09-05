@@ -10,7 +10,7 @@ import java.util.List;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class ServicioController {
   @Autowired
   private IServicioDao iServicioDao;

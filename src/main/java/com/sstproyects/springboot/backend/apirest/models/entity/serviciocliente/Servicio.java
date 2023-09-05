@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.NotEmpty;
 
+import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,11 +13,11 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "idservicio")
-public class Servicio implements Serializable{
+@EqualsAndHashCode(of = "idServicio",callSuper = false)
+public class Servicio extends Auditable implements Serializable{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "idservicio")
+  @Column(name = "idServicio")
   @NotEmpty(message =" no puede estar vacio")
   private Long idServicio;
   @NotEmpty(message =" no puede estar vacio")
@@ -49,6 +50,9 @@ public class Servicio implements Serializable{
   private byte[] foto;
   @Temporal(TemporalType.DATE)
   private Date createAt;
+  @Column(columnDefinition = "boolean default true") // Valor predeterminado establecido en "true" por defecto
+  private boolean activo;
+  private static final long serialVersionUID= 1L;
   @PrePersist
   public void prePersist() {
     createAt = new Date();

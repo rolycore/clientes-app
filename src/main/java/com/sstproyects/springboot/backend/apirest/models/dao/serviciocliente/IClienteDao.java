@@ -4,7 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.Cliente;
-import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface IClienteDao extends JpaRepository<Cliente, Long> {
 

@@ -1,4 +1,5 @@
 package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente;
+import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -6,6 +7,7 @@ import lombok.AllArgsConstructor;
 import jakarta.persistence.*;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -13,8 +15,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class CapacidadMedicion {
+@EqualsAndHashCode(of = "id",callSuper = false)
+public class CapacidadMedicion extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +65,7 @@ public class CapacidadMedicion {
   private String especificaciones;
   @Temporal(TemporalType.DATE)
   private Date createAt;
+  private static final long serialVersionUID= 1L;
   @PrePersist
   public void prePersist() {
     createAt = new Date();

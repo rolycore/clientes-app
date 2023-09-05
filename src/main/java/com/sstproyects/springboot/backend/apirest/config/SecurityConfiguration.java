@@ -47,7 +47,7 @@ public class SecurityConfiguration {
         .csrf()
         .disable()
         .authorizeHttpRequests()
-        .requestMatchers(
+        .requestMatchers(HttpMethod.POST,
                 "/api/v1/auth/**",
                 "/v2/api-docs",
                 "/v3/api-docs",
@@ -61,31 +61,104 @@ public class SecurityConfiguration {
                 "/swagger-ui.html"
         )
           .permitAll()
+      // Privilegios sobre rutas raíces comunes
+      .requestMatchers(
+        "/api/v1/management/**",
+        "/api/v1/clientes/**",
+        "/api/v1/equipos-clientes/**",
+        "/api/v1/calibraciones/**",
+        "/api/v1/cotizacionesCabe/**",
+        "/api/v1/cotizacionesDetalle/**",
+        "/api/v1/estados/**",
+        "/api/v1/instrumentos/**",
+        "/api/v1/laboratorios/**",
+        "/api/v1/precios/**",
+        "/api/v1/servicios/**",
+        "/api/v1/solicitudesCabe/**",
+        "/api/v1/solicitudesDetalle/**",
+        "/api/v1/unidadesMedida/**"
+      ).hasAnyRole("ADMIN", "MANAGER")
 
-
-        .requestMatchers("/api/v1/management/**").hasAnyRole(ADMIN.name(), MANAGER.name())
-
-
+//Rutas raices demo
         .requestMatchers(GET, "/api/v1/management/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
         .requestMatchers(POST, "/api/v1/management/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
         .requestMatchers(PUT, "/api/v1/management/**").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
         .requestMatchers(DELETE, "/api/v1/management/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
-//Permisos para CRUD Cliente Rol Manager
-      .requestMatchers(GET, "/api/cliente**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
-      .requestMatchers(POST, "/api/cliente**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
-      .requestMatchers(PUT, "/api/cliente*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
-      .requestMatchers(DELETE, "/api/cliente**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD Cliente Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/clientes/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/clientes/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/clientes/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/clientes/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD Equipo cliente Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/equipos-clientes/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/equipos-clientes/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/equipos-clientes/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/equipos-clientes/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+      //Permisos para CRUD calibraciones Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/calibraciones/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/calibraciones/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/calibraciones/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/calibraciones/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+
+      //Permisos para CRUD cotizacionesCabe Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/cotizacionesCabe/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/cotizacionesCabe/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/cotizacionesCabe/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/cotizacionesCabe/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+      //Permisos para CRUD cotizacionesDetalle Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/cotizacionesDetalle/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/cotizacionesDetalle/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/cotizacionesDetalle/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/cotizacionesDetalle/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD cotizacionesDetalle Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/cotizacionesDetalle/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/cotizacionesDetalle/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/cotizacionesDetalle/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/cotizacionesDetalle/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD Estados Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/estados/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/estados/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/estados/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/estados/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD instrumentos Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/instrumentos/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/instrumentos/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/instrumentos/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/instrumentos/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD laboratorios Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/laboratorios/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/laboratorios/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/laboratorios/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/laboratorios/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD precios Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/precios/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/precios/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/precios/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/precios/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD servicios Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/servicios/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/servicios/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/servicios/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/servicios/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD SolicitudesCabe Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/solicitudesCabe/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/solicitudesCabe/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/solicitudesCabe/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/solicitudesCabe/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD solicitudesDetalle Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/solicitudesDetalle/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/solicitudesDetalle/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/solicitudesDetalle/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/solicitudesDetalle/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
+//Permisos para CRUD unidadesMedida Rol ADMIN, Manager
+      .requestMatchers(HttpMethod.GET, "/api/v1/unidadesMedida/**").hasAnyAuthority(ADMIN_READ.name(), MANAGER_READ.name())
+      .requestMatchers(HttpMethod.POST, "/api/v1/unidadesMedida/**").hasAnyAuthority(ADMIN_CREATE.name(), MANAGER_CREATE.name())
+      .requestMatchers(HttpMethod.PUT, "/api/v1/unidadesMedida/*").hasAnyAuthority(ADMIN_UPDATE.name(), MANAGER_UPDATE.name())
+      .requestMatchers(HttpMethod.DELETE, "/api/v1/unidadesMedida/**").hasAnyAuthority(ADMIN_DELETE.name(), MANAGER_DELETE.name())
 
 
-      /* .requestMatchers("/api/v1/admin/**").hasRole(ADMIN.name())
 
-        .requestMatchers(GET, "/api/v1/admin/**").hasAuthority(ADMIN_READ.name())
-        .requestMatchers(POST, "/api/v1/admin/**").hasAuthority(ADMIN_CREATE.name())
-        .requestMatchers(PUT, "/api/v1/admin/**").hasAuthority(ADMIN_UPDATE.name())
-        .requestMatchers(DELETE, "/api/v1/admin/**").hasAuthority(ADMIN_DELETE.name())*/
-
-
-        .anyRequest()
+      .anyRequest()
           .authenticated()
         .and()
           .sessionManagement()

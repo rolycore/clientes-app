@@ -3,6 +3,7 @@ package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente
 import java.io.Serializable;
 import java.util.Date;
 
+import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import lombok.*;
 import jakarta.persistence.*;
 
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CotizacionDetalle implements Serializable {
+public class CotizacionDetalle extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +58,7 @@ public class CotizacionDetalle implements Serializable {
   private Float grantotal;
   @Temporal(TemporalType.DATE)
   private Date createAt;
+  private static final long serialVersionUID= 1L;
   @PrePersist
   public void prePersist() {
     createAt = new Date();

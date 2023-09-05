@@ -9,7 +9,7 @@ import java.util.List;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class EstadoController {
 
   private final IEstadoDao IEstadoDao;
