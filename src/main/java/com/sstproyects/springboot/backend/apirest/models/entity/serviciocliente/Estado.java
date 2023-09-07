@@ -15,15 +15,13 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id",callSuper=false)
+@EqualsAndHashCode(of = "idEstado",callSuper=false)
 public class Estado extends Auditable implements Serializable{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  @NotBlank(message =" no puede estar vacio")
-  @NotEmpty(message =" no puede estar vacio")
-  private Integer id;
+  @Column(name = "idEstado")
+  private Integer idEstado;
 
   @Column(name = "descripcion_estado", nullable = false)
   private String descripcionEstado;

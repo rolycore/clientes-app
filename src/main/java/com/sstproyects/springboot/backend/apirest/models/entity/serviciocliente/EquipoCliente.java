@@ -1,5 +1,6 @@
 package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,21 +10,21 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name="equipocliente")
+@Table(name="equipocliente",uniqueConstraints = {@UniqueConstraint(columnNames = {"nombre"})})
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id",callSuper = false)
+@EqualsAndHashCode(of = "idEquipo",callSuper = false)
 public class EquipoCliente extends Auditable implements Serializable {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  private Long id ;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long idEquipo ;
   @ColumnTransformer(
     read = "substring(codigoequipo, 5)", // Para leer desde la base de datos sin el prefijo
     write = "concat('CCE_', ?)" // Para escribir en la base de datos con el prefijo
@@ -40,6 +41,7 @@ public class EquipoCliente extends Auditable implements Serializable {
   @Size(min=4, max=12, message="el tamaño tiene que estar entre 4 y 12")
   @Column(nullable=false)
   private String categoria_equipo;
+
   @Column
   private String capacidad_maxima ;
   @Column
@@ -50,17 +52,8 @@ public class EquipoCliente extends Auditable implements Serializable {
   private String divisiones ;
   @Column
   private String observaciones ;
-  @NotEmpty(message =" no puede estar vacio")
-  @NotBlank(message =" no puede estar vacio")
-  @Column(name="cod_cliente_equipo",updatable=false)
-  private String codClienteEquipo;
- // @ManyToOne
-  //@JoinColumn(name = "cod_cliente_equipo", referencedColumnName = "cod_cliente")
- // private Cliente cliente;
   @Lob
-  @NotEmpty(message =" no puede estar vacio")
-  @NotBlank(message =" no puede estar vacio")
-  @Column(nullable=false)
+  @Column(columnDefinition = "LONGBLOB",nullable = false)
   private byte[] imagen_equipo;
   @Column
   private String unidad_medida;
@@ -99,9 +92,18 @@ public class EquipoCliente extends Auditable implements Serializable {
   @Temporal(TemporalType.DATE)
   private Date createAt;
   @Column(columnDefinition = "boolean default true") // Valor predeterminado establecido en "true" por defecto
-  private boolean activo;
+  private boolean activo= true;
   private static final long serialVersionUID= 1L;
-
+  @ManyToOne(fetch = FetchType.LAZY, optional=false)
+  @JoinColumn(name = "idCliente")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Cliente cliente;
+  @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL)
+  private Set<SolicitudDetalle> solicitudDetalles = new HashSet<>();
+  @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL)
+  private Set<CotizacionDetalle> cotizacionDetalles = new HashSet<>();
+  @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL)
+  private Set<Calibracion> calibraciones = new HashSet<>();
   @PrePersist
   public void prePersist() {
     createAt = new Date();

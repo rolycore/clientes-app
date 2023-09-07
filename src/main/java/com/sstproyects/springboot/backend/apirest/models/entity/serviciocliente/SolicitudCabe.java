@@ -1,5 +1,6 @@
 package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import lombok.*;
 import jakarta.persistence.*;
@@ -8,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "solicitud_cabe")
@@ -15,24 +18,18 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id",callSuper = false)
+@EqualsAndHashCode(of = "idSolicitud",callSuper = false)
 public class SolicitudCabe extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @NotBlank(message =" no puede estar vacio")
-  @NotEmpty(message =" no puede estar vacio")
-  private Long id;
+  private Long idSolicitud;
 
   @Column(name = "contacto_solicitud", nullable = false)
   @NotBlank(message =" no puede estar vacio")
   @NotEmpty(message =" no puede estar vacio")
   private String contactoSolicitud;
 
-  @Column(name = "cliente_solicitud", nullable = false)
-  @NotBlank(message =" no puede estar vacio")
-  @NotEmpty(message =" no puede estar vacio")
-  private String clienteSolicitud;
 
   @Column(name = "telefono_solicitud", nullable = false)
   private String telefonoSolicitud;
@@ -58,13 +55,12 @@ public class SolicitudCabe extends Auditable implements Serializable {
   private String observacionesSolicitud;
 
   @Column(name = "fechasolicitud", nullable = false)
+  @Temporal(TemporalType.DATE)
   private String fechaSolicitud;
 
   @Column(name = "aprobacion_solicitud")
   private String aprobacionSolicitud;
 
-  @Column(name = "cod_cliente", nullable = false)
-  private String codCliente;
 
   @Column(name = "estado_solicitud", nullable = false)
   private String estadoSolicitud;
@@ -95,6 +91,12 @@ public class SolicitudCabe extends Auditable implements Serializable {
   @Column(columnDefinition = "boolean default true") // Valor predeterminado establecido en "true" por defecto
   private boolean activo;
   private static final long serialVersionUID= 1L;
+  @ManyToOne(fetch = FetchType.LAZY, optional=false)
+  @JoinColumn(name = "idCliente")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Cliente cliente;
+  @OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL)
+  private Set<SolicitudDetalle> solicitudDetalles = new HashSet<>();
   @PrePersist
   public void prePersist() {
     createAt = new Date();

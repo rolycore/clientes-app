@@ -16,14 +16,14 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id",callSuper = false)
+@EqualsAndHashCode(of = "idLab",callSuper = false)
 public class Laboratorio extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
+  @Column(name = "idLab")
   @NotBlank(message =" no puede estar vacio")
-  private Integer id;
+  private Integer idLab;
   @NotBlank(message =" no puede estar vacio")
   @Column(name = "cod_laboratorios", nullable = false)
   private String codLaboratorios;

@@ -3,6 +3,7 @@ package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import lombok.*;
 import jakarta.persistence.*;
@@ -20,9 +21,7 @@ public class CotizacionDetalle extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @NotBlank(message =" no puede estar vacio")
-  @NotEmpty(message =" no puede estar vacio")
-  private Long id;
+  private Long idCotdetalle;
   @NotBlank(message =" no puede estar vacio")
   @NotEmpty(message =" no puede estar vacio")
   @Column(name = "no_cotizacion", nullable = false)
@@ -59,6 +58,16 @@ public class CotizacionDetalle extends Auditable implements Serializable {
   @Temporal(TemporalType.DATE)
   private Date createAt;
   private static final long serialVersionUID= 1L;
+  @ManyToOne(fetch = FetchType.LAZY, optional=false)
+  @JoinColumn(name = "idEquipo")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private EquipoCliente equipo;
+  @ManyToOne(fetch = FetchType.LAZY, optional=false)
+  @JoinColumn(name = "idCotizacion")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private CotizacionCabe cotizacion;
+
+
   @PrePersist
   public void prePersist() {
     createAt = new Date();

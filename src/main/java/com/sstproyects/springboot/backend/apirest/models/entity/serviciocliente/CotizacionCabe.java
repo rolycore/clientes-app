@@ -1,5 +1,6 @@
 package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import lombok.*;
 import jakarta.persistence.*;
@@ -8,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "cotizacion_cabe")
@@ -15,14 +18,12 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id",callSuper = false)
+@EqualsAndHashCode(of = "idCotizacion",callSuper = false)
 public class CotizacionCabe extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @NotBlank(message =" no puede estar vacio")
-  @NotEmpty(message =" no puede estar vacio")
-  private Long id;
+  private Long idCotizacion;
   @NotBlank(message =" no puede estar vacio")
   @NotEmpty(message =" no puede estar vacio")
   @Column(name = "no_cotizacion", nullable = false)
@@ -90,6 +91,12 @@ public class CotizacionCabe extends Auditable implements Serializable {
   @Column(columnDefinition = "boolean default true") // Valor predeterminado establecido en "true" por defecto
   private boolean activo;
   private static final long serialVersionUID= 1L;
+  @ManyToOne(fetch = FetchType.LAZY, optional=false)
+  @JoinColumn(name = "idCliente")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Cliente cliente;
+  @OneToMany(mappedBy = "cotizacion", cascade = CascadeType.ALL)
+  private Set<CotizacionDetalle> cotizacionDetalles = new HashSet<>();
   @PrePersist
   public void prePersist() {
     createAt = new Date();

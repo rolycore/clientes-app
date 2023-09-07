@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface IClienteDao extends JpaRepository<Cliente, Long> {
 
+
   // Otros métodos de consulta si los necesitas
 
 

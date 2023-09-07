@@ -18,7 +18,6 @@ public class Servicio extends Auditable implements Serializable{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "idServicio")
-  @NotEmpty(message =" no puede estar vacio")
   private Long idServicio;
   @NotEmpty(message =" no puede estar vacio")
   @Column(name = "nombre_servicio", nullable = false)

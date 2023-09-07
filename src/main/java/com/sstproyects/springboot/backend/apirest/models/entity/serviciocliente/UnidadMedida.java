@@ -14,14 +14,12 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id",callSuper = false)
+@EqualsAndHashCode(of = "idUm",callSuper = false)
 public class UnidadMedida extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @NotBlank(message =" no puede estar vacio")
-  @NotEmpty(message =" no puede estar vacio")
-  private Long id;
+  private Long idUm;
 
   @Column(name = "abreviatura_um", nullable = false)
   private String abreviaturaUm;

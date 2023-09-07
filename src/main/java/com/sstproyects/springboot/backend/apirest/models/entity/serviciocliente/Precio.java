@@ -13,13 +13,13 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id",callSuper = false)
+@EqualsAndHashCode(of = "idPrecio",callSuper = false)
 public class Precio extends Auditable implements Serializable{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
+  @Column(name = "idPrecio")
+  private Long idPrecio;
 
   @Column(name = "nombre_servicio_precios", nullable = false)
   private String nombreServicioPrecios;

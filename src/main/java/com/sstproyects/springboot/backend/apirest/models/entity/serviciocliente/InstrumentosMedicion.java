@@ -14,15 +14,14 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id",callSuper = false)
+@EqualsAndHashCode(of = "idInst",callSuper = false)
 public class InstrumentosMedicion extends Auditable implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  @NotBlank(message =" no puede estar vacio")
-  @NotEmpty(message =" no puede estar vacio")
-  private Long id;
+  @Column(name = "idInst")
+
+  private Long idInst;
 
   @Column(name = "nombre", nullable = false)
   private String nombre;

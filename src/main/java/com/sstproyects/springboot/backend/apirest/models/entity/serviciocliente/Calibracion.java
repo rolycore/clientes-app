@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sstproyects.springboot.backend.apirest.auditoria.modelo.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,17 +14,16 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id",callSuper = false)
+@EqualsAndHashCode(of = "idCalibracion",callSuper = false)
 public class Calibracion extends Auditable implements Serializable{
 
   @Id
-  @Column(name = "id", nullable = false)
-  @NotEmpty(message =" no puede estar vacio")
-  private Long id;
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
+
+  private Long idCalibracion;
   @NotEmpty(message =" no puede estar vacio")
   @Column(name = "descripcion", nullable = false)
   private String descripcion;
-
   @Column(name = "cod_equipo", nullable = false,updatable = false)
   private String codigoEquipo;
   @NotEmpty(message =" no puede estar vacio")
@@ -36,14 +36,19 @@ public class Calibracion extends Auditable implements Serializable{
   @Column(name = "calibrado_por", nullable = false)
   private String calibradoPor;
   @NotEmpty(message =" no puede estar vacio")
-  @Column(name="cod_cliente_calibracion", nullable = false,updatable=false)
-  private String codCliente;
-  @NotEmpty(message =" no puede estar vacio")
   @Column(name = "nombre_cliente", nullable = false)
   private String nombreCliente;
   @Temporal(TemporalType.DATE)
   private Date createAt;
   private static final long serialVersionUID= 1L;
+  @ManyToOne(fetch = FetchType.LAZY, optional=false)
+  @JoinColumn(name = "idCliente")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private Cliente cliente;
+  @ManyToOne(fetch = FetchType.LAZY, optional=false)
+  @JoinColumn(name = "idEquipo")
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private EquipoCliente equipo;
   @PrePersist
   public void prePersist() {
     createAt = new Date();

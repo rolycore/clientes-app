@@ -1,10 +1,7 @@
 package com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -17,18 +14,18 @@ import org.hibernate.annotations.ColumnTransformer;
 
 
 @Entity
-@Table(name="cliente")
+@Table(name="cliente",uniqueConstraints = {@UniqueConstraint(columnNames = {"nombre"})})
 @Getter
 @Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id", callSuper = false)
+@EqualsAndHashCode(of = "idCliente", callSuper = false)
 public class Cliente extends Auditable implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+	private Long idCliente;
 	@NotEmpty(message =" no puede estar vacio")
 	@NotBlank(message =" no puede estar vacio")
 	@Size(min=4, max=12, message="el tamaño tiene que estar entre 4 y 12")
@@ -101,13 +98,22 @@ public class Cliente extends Auditable implements Serializable{
   private String celular_cobro;
   @Column
   private String correo_cobro;
-  @Column(columnDefinition = "boolean default true") // Valor predeterminado establecido en "true" por defecto
-  private boolean activo;
+  @Column// Valor predeterminado establecido en "true" por defecto
+  private boolean activo= true;
   private static final long serialVersionUID= 1L;
   // Relación con Equipos
-  //@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-  //private List<EquipoCliente> equipos = new ArrayList<>();
-
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+  private Set<EquipoCliente> equipos = new HashSet<>();
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+  private Set<SolicitudCabe> solicitudes = new HashSet<>();
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+  private Set<CotizacionCabe> cotizaciones = new HashSet<>();
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+  private Set<Calibracion> calibraciones = new HashSet<>();
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+  private Set<OrdenTrabajo> ordenTrabajos = new HashSet<>();
+  @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+  private Set<ReporteTecnico> reporteTecnicos = new HashSet<>();
 	@PrePersist
 	public void prePersist() {
 		createAt = new Date();

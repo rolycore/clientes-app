@@ -19,8 +19,8 @@ public class EquipoClienteServiceImpl implements IEquipoClienteService {
 
   @Override
   @Transactional
-  public EquipoCliente findById(Long id) {
-    return equipoclienteDao.findById(id).orElse(null);
+  public EquipoCliente findById(Long idEquipo) {
+    return equipoclienteDao.findById(idEquipo).orElse(null);
   }
 
   @Override
@@ -31,7 +31,34 @@ public class EquipoClienteServiceImpl implements IEquipoClienteService {
 
   @Override
   @Transactional
-  public void delete(Long id) {
-    equipoclienteDao.deleteById(id);
+  public boolean delete(Long idEquipo) {
+    try {
+      equipoclienteDao.deleteById(idEquipo);// Esto eliminará el cliente por ID si existe
+      return true; // Devuelve true para indicar éxito
+    } catch (Exception e) {
+      // En caso de error, puedes registrar el error o realizar otro manejo
+      return false; // Devuelve false para indicar que no se pudo eliminar
+    }
+  }
+
+
+  @Override
+  public EquipoCliente createOrUpdate(EquipoCliente equipocliente) {
+    // Si el EquipoCliente tiene un ID válido, intenta recuperarlo
+    if (equipocliente.getIdEquipo() != null) {
+      EquipoCliente existingEquipoCliente = equipoclienteDao.findById(equipocliente.getIdEquipo()).orElse(null);
+      if (existingEquipoCliente != null) {
+        // Actualiza los campos relevantes del EquipoCliente existente si es necesario
+        existingEquipoCliente.setNombre(equipocliente.getNombre());
+        // Actualiza otros campos según tus necesidades
+        // ...
+
+        // Guarda el EquipoCliente actualizado en la base de datos
+        return equipoclienteDao.save(existingEquipoCliente);
+      }
+    }
+
+    // Si el EquipoCliente no tiene un ID válido o no existe, crea uno nuevo
+    return equipoclienteDao.save(equipocliente);
   }
 }
