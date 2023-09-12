@@ -30,6 +30,8 @@ public class OrdenTrabajo extends Auditable implements Serializable{
   @Column
   private String no_ordencompra;
   @Column
+  private String no_cotizacion;
+  @Column
   @Temporal(TemporalType.DATE)
   private Date fecha_entrega_certificado;
   @Column
@@ -70,6 +72,8 @@ public class OrdenTrabajo extends Auditable implements Serializable{
   @Email(message=" no es una dirección bien formada")
   @Column(nullable=false, unique=true)
   private String correo;
+  @Column
+  private String contacto_cargo;
   //recepcion tecnica del equipo
   @Column
   @NotBlank(message =" no puede estar vacio")
@@ -144,6 +148,8 @@ public class OrdenTrabajo extends Auditable implements Serializable{
   @Column
   @Temporal(TemporalType.DATE)
   private Date fecha_entrega_ibc;
+  @Column
+  private boolean es_fecha_entrga;
   @Column
   private String persona_entrega_ibc;
   @Column

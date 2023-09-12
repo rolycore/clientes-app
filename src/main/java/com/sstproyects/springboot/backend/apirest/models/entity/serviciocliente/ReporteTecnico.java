@@ -29,6 +29,9 @@ public class ReporteTecnico extends Auditable implements Serializable{
   private String no_reporte_tecnico;
   @Column
   @NotBlank(message =" no puede estar vacio")
+  private String no_cotizacion;
+  @Column
+  @NotBlank(message =" no puede estar vacio")
   private String tecnico;
   @Column
   @Temporal(TemporalType.TIME)
