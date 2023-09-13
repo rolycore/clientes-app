@@ -1,5 +1,6 @@
 package com.sstproyects.springboot.backend.apirest.controllers.serviciocliente;
 
+import com.sstproyects.springboot.backend.apirest.excepciones.ReportNotFoundException;
 import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.Cliente;
 import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.EquipoCliente;
 import com.sstproyects.springboot.backend.apirest.models.entity.serviciocliente.ReporteTecnico;
@@ -98,17 +99,19 @@ public class ReporteTecnicoController {
   }
 
   @GetMapping("/reporte-tecnico/{id}/{format}")
-  public ResponseEntity<?> generateReport(
+  public ResponseEntity<byte[]> generateReport(
     @PathVariable Long id, @PathVariable String format,
     @ModelAttribute ReporteTecnico reporteTecnico) {
     try {
       // Validar el formato proporcionado
       if (!isValidFormat(format)) {
-        return ResponseEntity.badRequest().body("Formato no válido");
+        return ResponseEntity.badRequest().body("Formato no válido".getBytes());
       }
 
       reporteTecnico = iReporteTecnicoService.findById(id);
-
+      if (id == null) {
+        return ResponseEntity.badRequest().body("El ID no puede ser nulo ".getBytes());
+      }
       if (reporteTecnico != null) {
         Optional<Cliente> clienteOptional = Optional.ofNullable(clienteService.findById(reporteTecnico.getCliente().getIdCliente()));
         if (!clienteOptional.isPresent()) {
@@ -136,15 +139,21 @@ public class ReporteTecnicoController {
           .headers(headers)
           .body(reportBytes);
       } else {
-        return ResponseEntity.badRequest().body("No se encontró el ID del reporte");
+        return ResponseEntity.badRequest()
+          .body("No se encontró el ID del reporte".getBytes());
       }
     } catch (IOException e) {
       // Manejo de errores en caso de que la conversión falle.
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al generar el informe.");
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body("Error al generar el informe. ".getBytes());
     } catch (JRException e) {
-      throw new RuntimeException(e);
+      // Manejo de la situación en la que no se encontró el reporte
+      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body("No se encontró el reporte técnico con ID " + reporteTecnico.getIdreptec());
+      throw new ReportNotFoundException("No se encontró el reporte técnico con ID " + reporteTecnico.getIdreptec());
     }
   }
+
 
 
 

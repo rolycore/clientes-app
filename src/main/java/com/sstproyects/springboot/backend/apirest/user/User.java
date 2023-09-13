@@ -95,4 +95,12 @@ public class User extends Auditable implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
+
+  public void setTokenPassword(Object o) {
+    this.tokens = tokens;
+  }
+
+  public void setTokens(String tokenPassword) {
+    this.tokens = tokens;
+  }
 }

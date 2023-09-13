@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -48,19 +49,14 @@ public class SecurityConfiguration {
       .and()
         .csrf()
         .disable()
-        .authorizeHttpRequests()
+      .authorizeHttpRequests()
         .requestMatchers(HttpMethod.POST,
                 "/api/v1/auth/**",
-                "/v2/api-docs",
-                "/v3/api-docs",
-                "/v3/api-docs/**",
-                "/swagger-resources",
-                "/swagger-resources/**",
-                "/configuration/ui",
-                "/configuration/security",
-                "/swagger-ui/**",
-                "/webjars/**",
-                "/swagger-ui.html"
+          "/email-password/**",
+          "/v2/api-docs/**",
+          "/swagger-ui/**",
+          "/swagger-resources/**",
+          "/configuration/**"
         )
           .permitAll()
       // Privilegios sobre rutas raíces comunes
